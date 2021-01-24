@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/bookmarks', 'BookmarkController@index');
+
 // Route::get('/test', function(){
 //     return 'test';
 // });
@@ -22,3 +24,6 @@ Route::get('/', function () {
 // Route::get('/test/{id}', function($id){
 //     return $id;
 // })->where('id', '[0-9]+');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
