@@ -14,7 +14,14 @@ class BookmarkController extends Controller
      */
     public function index()
     {
-        //
+        // $bookmarks = Bookmark::all();
+        $bookmarks = Bookmark::paginate(20);
+
+        // Rubyみたいに変数書くだけじゃダメで、それを連想配列に入れてビューに表示させてる
+        // return view('コントローラー名.表示したいビュー', [連想配列])
+        // return view('bookmarks.index', ['bookmarks' => $bookmarks]);
+        // ↓配列のキーと変数が同じ場合は省略可能 
+        return view('bookmarks.index', compact('bookmarks'));
     }
 
     /**
