@@ -51,9 +51,12 @@ class BookmarkController extends Controller
      * @param  \App\Models\Bookmark  $bookmark
      * @return \Illuminate\Http\Response
      */
+    // モデルバインディング・・・引数を($id)ではなく(Bookmark $bookmark)としていれば、自動でidを取得してくれるため＊1が不要
     public function show(Bookmark $bookmark)
     {
-        //
+        // ＊1 $bookmark = Bookmark::findOrFail($id);
+
+        return view('bookmarks.show',compact('bookmark'));
     }
 
     /**
