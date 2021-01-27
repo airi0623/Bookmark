@@ -27,7 +27,6 @@
                         <td>{{ $bookmark->created_at->format('Y年m月d日') }}</td>
                       </tr>
                     </table>
-                    {{ $bookmarks -> links() }}
                 </div>
             </div>
         </div>
