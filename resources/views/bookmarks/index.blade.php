@@ -17,6 +17,7 @@
                         <tr>
                           <th>ID</th>
                           <th>タイトル</th>
+                          <th>アクション</th>
                         </tr>
                       </thead>
                       @foreach($bookmarks as $bookmark)
@@ -29,7 +30,11 @@
                           ② <td><a href="{{ action(BookmarkController@show,$bookmark->url) }}">{{ $bookmark -> title }}</a></td>
                           ↓【ルートさえ変えなければ使用できる方法】actionメソッドをrouteメソッドへ変更+web.phpにてnameで任意の文字列を指定 -->
                           --}}
-                          <td><a href="{{ route('bookmarks.show', $bookmark->id) }}">{{ $bookmark -> title }}</a></td>
+                          <td><a href="{{ $bookmark->url }}">{{ $bookmark -> title }}</a></td>
+                          <td>
+                            <a href="{{ route('bookmarks.edit', $bookmark->id) }}" class="btn btn-secondary btn-sm">編集</a>
+                            <a href="{{ route('bookmarks.show', $bookmark->id) }}" class="btn btn-secondary btn-sm">詳細</a>
+                          </td>
                         </tr>
                       @endforeach
                     </table>

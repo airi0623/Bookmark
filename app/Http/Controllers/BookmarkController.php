@@ -45,7 +45,6 @@ class BookmarkController extends Controller
     public function store(Request $request)
     {
         Bookmark::create($request->all());
-
         return redirect()->route('bookmarks.index');
     }
 
@@ -58,6 +57,7 @@ class BookmarkController extends Controller
     // モデルバインディング・・・引数を($id)ではなく(Bookmark $bookmark)としていれば、自動でidを取得してくれるため＊1が不要
     public function show(Bookmark $bookmark)
     {
+        // findOrFail・・・データがなければエラー画面を出す
         // ＊1 $bookmark = Bookmark::findOrFail($id);
 
         return view('bookmarks.show',compact('bookmark'));
@@ -71,7 +71,7 @@ class BookmarkController extends Controller
      */
     public function edit(Bookmark $bookmark)
     {
-        //
+        return view('bookmarks.edit',compact('bookmark'));
     }
 
     /**
@@ -83,7 +83,8 @@ class BookmarkController extends Controller
      */
     public function update(Request $request, Bookmark $bookmark)
     {
-        //
+        $bookmark->update($request->all());
+        return redirect()->route('bookmarks.edit', $bookmark);
     }
 
     /**

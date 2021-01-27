@@ -27,6 +27,7 @@
                         <td>{{ $bookmark->created_at->format('Y年m月d日') }}</td>
                       </tr>
                     </table>
+                    <a href="/bookmarks" class="btn btn-secondary">戻る</a>
                 </div>
             </div>
         </div>

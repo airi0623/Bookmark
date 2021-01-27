@@ -16,16 +16,21 @@ Route::get('/', function () {
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/bookmarks', 'BookmarkController@index')->name('bookmarks.index');
-// {-- BookmarkController@show-----------------------
-// idが数字だけになるようにwhereで指定【public function show($id):コントローラーの受け取り】
-// Route::get('/bookmark/{id}', 'BookmarkController@show')->where('id','[0-9]+')->name('bookmarks.show');
-// ↓ コントローラーの受け取り:public function show(Bookmark $bookmark)--}
-Route::get('/bookmarks/create', 'BookmarkController@create')->name('bookmarks.create');
-Route::get('/bookmarks/{bookmark}', 'BookmarkController@show')->name('bookmarks.show');
-Route::post('/bookmarks', 'BookmarkController@store')->name('bookmarks.store');
 
-//Route::resource('bookmarks', 'BookmarkController');
+// Route::get('/bookmarks', 'BookmarkController@index')->name('bookmarks.index');
+// // {-- BookmarkController@show-----------------------
+// // ① コントローラーの受け取り:public function show($id)・・・idが数字だけになるようにwhereで指定
+// // Route::get('/bookmark/{id}', 'BookmarkController@show')->where('id','[0-9]+')->name('bookmarks.show');
+// // ②↓コントローラーの受け取り:public function show(Bookmark $bookmark)--}
+// Route::get('/bookmarks/{bookmark}', 'BookmarkController@show')->where('bookmark','[0-9]+')->name('bookmarks.show');
+// Route::get('/bookmarks/create', 'BookmarkController@create')->name('bookmarks.create');
+// Route::post('/bookmarks', 'BookmarkController@store')->name('bookmarks.store');
+// Route::get('/bookmarks/{bookmark}/edit', 'BookmarkController@edit')->where('bookmark','[0-9]+')->name('bookmarks.edit');
+// Route::post('/bookmarks/{bookmark}', 'BookmarkController@update')->where('bookmark','[0-9]+')->name('bookmarks.update');
+
+// 全てのルートを設定
+Route::resource('bookmarks', 'BookmarkController');
+
 Auth::routes();
 
 
