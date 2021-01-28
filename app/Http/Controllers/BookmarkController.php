@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
-use Illuminate\Http\Request;
+use App\Http\Requests\BookmarkRequest;
+// use Illuminate\Http\Request;
 
 class BookmarkController extends Controller
 {
@@ -42,10 +43,12 @@ class BookmarkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookmarkRequest $request)
     {
         Bookmark::create($request->all());
-        return redirect()->route('bookmarks.index');
+        return redirect()
+            ->route('bookmarks.index')
+            ->with('status', 'ブックマークを登録しました');
     }
 
     /**
@@ -81,10 +84,13 @@ class BookmarkController extends Controller
      * @param  \App\Models\Bookmark  $bookmark
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bookmark $bookmark)
+    public function update(BookmarkRequest $request, Bookmark $bookmark)
     {
         $bookmark->update($request->all());
-        return redirect()->route('bookmarks.edit', $bookmark);
+        return redirect()
+            ->route('bookmarks.show', $bookmark)
+            // 【疑問】route('bookmarks.index', $bookmark);・・・変数なぜ渡す？
+            ->with('status', 'ブックマークを更新しました');
     }
 
     /**
@@ -95,6 +101,10 @@ class BookmarkController extends Controller
      */
     public function destroy(Bookmark $bookmark)
     {
-        //
+        $bookmark->delete();
+        return redirect()
+            ->route('bookmarks.index')
+            ->with('status', 'ブックマークを削除しました');
+            // status・・・任意のsession名
     }
 }
