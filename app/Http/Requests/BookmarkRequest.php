@@ -26,7 +26,7 @@ class BookmarkRequest extends FormRequest
         return [
             'title' => 'required|max:50',
             'url' => 'required|max:100|url',
-            'description' => 'max:100',
+            'description' => 'max:100'
         ];
     }
 }
