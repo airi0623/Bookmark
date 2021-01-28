@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
-use Illuminate\Http\Request;
+use App\Http\Requests\BookmarkRequest;
+// use Illuminate\Http\Request;
 
 class BookmarkController extends Controller
 {
@@ -15,23 +16,25 @@ class BookmarkController extends Controller
     public function index()
     {
         // $bookmarks = Bookmark::all();
-        $bookmarks = Bookmark::paginate(20);
+        $bookmarks = Bookmark::orderBy('id','desc')->paginate(20);
 
         // Rubyみたいに変数書くだけじゃダメで、それを連想配列に入れてビューに表示させてる
         // return view('コントローラー名.表示したいビュー', [連想配列])
         // return view('bookmarks.index', ['bookmarks' => $bookmarks]);
         // ↓配列のキーと変数が同じ場合は省略可能 
         return view('bookmarks.index', compact('bookmarks'));
+        // ◆ compact('bookmarks')変数を渡している？
     }
 
     /**
-     * Show the form for creating a new resource.
+
+    * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        return view('bookmarks.create');
     }
 
     /**
@@ -40,9 +43,12 @@ class BookmarkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookmarkRequest $request)
     {
-        //
+        Bookmark::create($request->all());
+        return redirect()
+            ->route('bookmarks.index')
+            ->with('status', 'ブックマークを登録しました');
     }
 
     /**
@@ -51,9 +57,13 @@ class BookmarkController extends Controller
      * @param  \App\Models\Bookmark  $bookmark
      * @return \Illuminate\Http\Response
      */
+    // モデルバインディング・・・引数を($id)ではなく(Bookmark $bookmark)としていれば、自動でidを取得してくれるため＊1が不要
     public function show(Bookmark $bookmark)
     {
-        //
+        // findOrFail・・・データがなければエラー画面を出す
+        // ＊1 $bookmark = Bookmark::findOrFail($id);
+
+        return view('bookmarks.show',compact('bookmark'));
     }
 
     /**
@@ -64,7 +74,7 @@ class BookmarkController extends Controller
      */
     public function edit(Bookmark $bookmark)
     {
-        //
+        return view('bookmarks.edit',compact('bookmark'));
     }
 
     /**
@@ -74,9 +84,13 @@ class BookmarkController extends Controller
      * @param  \App\Models\Bookmark  $bookmark
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bookmark $bookmark)
+    public function update(BookmarkRequest $request, Bookmark $bookmark)
     {
-        //
+        $bookmark->update($request->all());
+        return redirect()
+            ->route('bookmarks.show', $bookmark)
+            // 【疑問】route('bookmarks.index', $bookmark);・・・変数なぜ渡す？
+            ->with('status', 'ブックマークを更新しました');
     }
 
     /**
@@ -87,6 +101,10 @@ class BookmarkController extends Controller
      */
     public function destroy(Bookmark $bookmark)
     {
-        //
+        $bookmark->delete();
+        return redirect()
+            ->route('bookmarks.index')
+            ->with('status', 'ブックマークを削除しました');
+            // status・・・任意のsession名
     }
 }
