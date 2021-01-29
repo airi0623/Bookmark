@@ -11,11 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 // Route::get('/bookmarks', 'BookmarkController@index')->name('bookmarks.index');
 // // {-- BookmarkController@show-----------------------
@@ -28,10 +23,16 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/bookmarks/{bookmark}/edit', 'BookmarkController@edit')->where('bookmark','[0-9]+')->name('bookmarks.edit');
 // Route::post('/bookmarks/{bookmark}', 'BookmarkController@update')->where('bookmark','[0-9]+')->name('bookmarks.update');
 
-// 全てのルートを設定
-Route::resource('bookmarks', 'BookmarkController');
-
 Auth::routes();
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/', 'BookmarkController@index');
+    // 全てのルートを設定
+    Route::resource('tags', 'TagController');
+    Route::resource('bookmarks', 'BookmarkController');
+});
+
+
 
 
 //{-- 実際に動いていること -------------------
