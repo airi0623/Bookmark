@@ -74,6 +74,7 @@ class BookmarkController extends Controller
      */
     public function edit(Bookmark $bookmark)
     {
+        // $bookmark->old('bookmarkTitle');
         return view('bookmarks.edit',compact('bookmark'));
     }
 

@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function(){
     // 全てのルートを設定
     Route::resource('tags', 'TagController');
     Route::resource('bookmarks', 'BookmarkController');
+    
 });
 
 

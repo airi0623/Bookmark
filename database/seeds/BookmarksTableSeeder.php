@@ -11,7 +11,8 @@ class BookmarksTableSeeder extends Seeder
      */
     public function run()
     {
-        //factoryfileが実行するように設定(第一引数：モデル名、第二引数：個数)
+        //factoryfileが実行するように設定(第一引数：Model class、第二引数：個数)
+        // App\Models\Bookmark::class・・・App\Models\Bookmarkのclassを使用するよということ
         factory(App\Models\Bookmark::class, 100)->create();
     }
 }
