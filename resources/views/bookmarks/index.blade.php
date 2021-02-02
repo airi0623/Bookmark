@@ -19,11 +19,12 @@
                           <th>ID</th>
                           <th>タイトル</th>
                           <th>アクション</th>
+                          <th>タグ</th>
                         </tr>
                       </thead>
                       @foreach($bookmarks as $bookmark)
                         <tr>
-                          <td>{{ $bookmark -> id }}</td>
+                          <td class="align-middle">{{ $bookmark -> id }}</td>
                           {{--
                           <!-- ↓ 文字列で直接リンクを設定するとルーティングを変更した際、ここも変更する必要が出てくる
                           ① <td><a href="/bookmark/{{ $bookmark -> id }}">{{ $bookmark -> title }}</a></td>
@@ -31,8 +32,18 @@
                           ② <td><a href="{{ action(BookmarkController@show,$bookmark->url) }}">{{ $bookmark -> title }}</a></td>
                           ↓【ルートさえ変えなければ使用できる方法】actionメソッドをrouteメソッドへ変更+web.phpにてnameで任意の文字列を指定 -->
                           --}}
-                          <td ><a href="{{ $bookmark->url }}">{{ $bookmark -> title }}</a></td>
-                          <td >
+                          <td class="align-middle">
+                            <a href="{{ $bookmark->url }}">{{ $bookmark -> title }}</a>
+                          </td>
+                          <td class="align-middle">
+                            @foreach($bookmark->tags as $tag)
+                              <a href=" {{ route('tags.show', $tag->id )}}">{{ $tag->title }}</a>
+                              @unless($loop->last)
+                                ,
+                              @endunless
+                            @endforeach
+                          </td>
+                          <td class="align-middle">
                             <div class="d-flex">
                               <a href="{{ route('bookmarks.edit', $bookmark->id) }}" class="btn btn-secondary btn-sm">編集</a>
                               <a href="{{ route('bookmarks.show', $bookmark->id) }}" class="btn btn-secondary btn-sm ml-1">詳細</a>

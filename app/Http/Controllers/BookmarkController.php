@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
+use App\Models\Tag;
 use App\Http\Requests\BookmarkRequest;
 // use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class BookmarkController extends Controller
     public function index()
     {
         // $bookmarks = Bookmark::all();
-        $bookmarks = Bookmark::orderBy('id','desc')->paginate(20);
+        $bookmarks = Bookmark::with('tags')->orderBy('id','desc')->paginate(20);
 
         // Rubyみたいに変数書くだけじゃダメで、それを連想配列に入れてビューに表示させてる
         // return view('コントローラー名.表示したいビュー', [連想配列])
@@ -34,7 +35,9 @@ class BookmarkController extends Controller
      */
     public function create()
     {
-        return view('bookmarks.create');
+        // pluckメソッドでキーバリューの形にした後、toArrayで配列にしている
+        $tags = Tag::pluck('title', 'id')->toArray();
+        return view('bookmarks.create', compact('tags'));
     }
 
     /**
@@ -45,7 +48,8 @@ class BookmarkController extends Controller
      */
     public function store(BookmarkRequest $request)
     {
-        Bookmark::create($request->all());
+        $bookmark = Bookmark::create($request->all());
+        $bookmark->tags()->sync($request->tags);
         return redirect()
             ->route('bookmarks.index')
             ->with('status', 'ブックマークを登録しました');
@@ -74,7 +78,10 @@ class BookmarkController extends Controller
      */
     public function edit(Bookmark $bookmark)
     {
-        return view('bookmarks.edit',compact('bookmark'));
+        // pluckメソッドでキーバリューの形にした後、toArrayで配列にしている
+        $tags = Tag::pluck('title', 'id')->toArray();
+        // $bookmark->old('bookmarkTitle');
+        return view('bookmarks.edit',compact('bookmark', 'tags'));
     }
 
     /**
@@ -87,6 +94,8 @@ class BookmarkController extends Controller
     public function update(BookmarkRequest $request, Bookmark $bookmark)
     {
         $bookmark->update($request->all());
+        //syncタグのリレーションを保存する
+        $bookmark->tags()->sync($request->tags);
         return redirect()
             ->route('bookmarks.show', $bookmark)
             // 【疑問】route('bookmarks.index', $bookmark);・・・変数なぜ渡す？
@@ -102,6 +111,9 @@ class BookmarkController extends Controller
     public function destroy(Bookmark $bookmark)
     {
         $bookmark->delete();
+        // タグのリレーションを削除する
+        $bookmark->tags()->detach();
+
         return redirect()
             ->route('bookmarks.index')
             ->with('status', 'ブックマークを削除しました');

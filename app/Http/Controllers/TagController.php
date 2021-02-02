@@ -37,11 +37,11 @@ class TagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Tag $tag)
+    public function store(TagRequest $request, Tag $tag)
     {
         Tag::create($request->all());
         return redirect()
-            ->route('Tags.index')
+            ->route('tags.index')
             ->with('status', 'ブックマークを登録しました');
     }
 
@@ -53,7 +53,8 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        return view('tags.show',compact('tag'));
+        $bookmarks = $tag->bookmarks()->paginate(20);
+        return view('tags.show',compact('tag', 'bookmarks'));
     }
 
     /**
@@ -91,6 +92,8 @@ class TagController extends Controller
     public function destroy(Tag $tag)
     {
         $tag->delete();
+        $tag->bookmarks()->detach();
+
         return redirect()
             ->route('tags.index')
             ->with('status', 'タグを削除しました');
