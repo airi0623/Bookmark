@@ -38,6 +38,28 @@
   </span>
   @enderror
 </div>
+<div class="form-group">
+  <label for="InputTag">タグ</label>
+  @foreach($tags as $key=>$tag)
+    <div class="form-check form-check-inline">
+      <input
+          type="checkbox"
+          name="tags[]"
+          value="{{ $key }}"
+          id="tag{{ $key }}"
+          @if(isset($bookmark->tags) && $bookmark->tags->contains($key))
+            checked
+          @endif
+      >
+    </div>
+    <label for="tag{{ $key }}" class="form-check-label">{{ $tag }}</label>
+  @endforeach
+  @error('tag')
+  <span class="invalid-feedback" role="alert">
+      <strong>{{ $message }}</strong>
+  </span>
+  @enderror
+</div>
 <button type="submit" class="btn btn-primary">送信</button>
 <!-- route{{}}の記述方法が使えない -->
 <a href="/bookmarks" class="btn btn-secondary">一覧へ戻る</a>
